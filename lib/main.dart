@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_atoms/widgets/atoms/icon_label.dart';
+import 'package:flutter_atoms/widgets/atoms/toast.dart';
 import 'package:flutter_atoms/widgets/molecules/base_card.dart';
 import 'package:flutter_atoms/widgets/molecules/spaced_row.dart';
 import 'package:flutter_atoms/widgets/organisms/sliver_appbar_scaffold.dart';
@@ -64,12 +64,15 @@ class MyHomePage extends StatelessWidget {
                       Text("This is a description of the card $index")
                     ],
                   ),
-                  footer: SpacedRow(
-                    children: [
-                      IconLabel(icon: Icons.people, label: '10'),
-                      IconLabel(icon: Icons.people, label: '20')
-                    ],
-                  ),
+                  footer: IconButton(
+                      icon: const Icon(Icons.info),
+                      onPressed: () => {
+                            ToastSnackbar.show(
+                              context,
+                              'This is a toast message',
+                              ToastType.info,
+                            )
+                          }),
                 )));
   }
 }
