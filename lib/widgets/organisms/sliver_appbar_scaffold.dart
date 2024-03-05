@@ -12,6 +12,7 @@ class SliverAppbarScaffold extends StatelessWidget {
   final List<Widget>? actions;
   final ScrollPhysics? physics;
   final SliverPersistentHeaderDelegate? delegate;
+  final BorderRadius? borderRadius;
   final Widget child;
   const SliverAppbarScaffold(
       {super.key,
@@ -26,6 +27,7 @@ class SliverAppbarScaffold extends StatelessWidget {
       this.leading,
       this.actions,
       this.delegate,
+      this.borderRadius,
       required this.child});
 
   @override
@@ -39,6 +41,7 @@ class SliverAppbarScaffold extends StatelessWidget {
               SliverPersistentHeader(
                 delegate: delegate ??
                     CustomSliverAppbarDelegate(
+                        borderRadius: borderRadius,
                         expandedHeight: expandedHeight!,
                         onExpandedWidget: expandedWidget,
                         collapsedWidget: collapsedWidget ??
@@ -66,15 +69,16 @@ class CustomSliverAppbarDelegate extends SliverPersistentHeaderDelegate {
   final double expandedHeight;
   final Widget? onExpandedWidget;
   final Widget collapsedWidget;
+  final BorderRadius? borderRadius;
 
-  const CustomSliverAppbarDelegate({
-    required this.expandedHeight,
-    required this.collapsedWidget,
-    this.onExpandedWidget,
-  });
+  const CustomSliverAppbarDelegate(
+      {required this.expandedHeight,
+      required this.collapsedWidget,
+      this.onExpandedWidget,
+      this.borderRadius});
 
   @override
-  double get minExtent => kToolbarHeight + 40;
+  double get minExtent => kToolbarHeight + 56;
 
   @override
   double get maxExtent => expandedHeight;
@@ -82,14 +86,22 @@ class CustomSliverAppbarDelegate extends SliverPersistentHeaderDelegate {
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return Stack(
-      children: [
-        onExpandedWidget ?? Container(),
-        // show collapsed widget (normally appbar, title and actions)
-        Opacity(
-            opacity: (shrinkOffset / (maxExtent - minExtent)).clamp(0.0, 1.0),
-            child: collapsedWidget),
-      ],
+    return ClipRRect(
+      borderRadius: borderRadius ??
+          const BorderRadius.only(
+            bottomLeft: Radius.circular(8),
+            bottomRight: Radius.circular(8),
+          ),
+      child: Stack(
+        children: [
+          onExpandedWidget ?? Container(),
+
+          // show collapsed widget (normally appbar, title and actions)
+          Opacity(
+              opacity: (shrinkOffset / (maxExtent - minExtent)).clamp(0.0, 1.0),
+              child: collapsedWidget),
+        ],
+      ),
     );
   }
 

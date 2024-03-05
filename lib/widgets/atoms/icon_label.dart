@@ -11,7 +11,7 @@ class IconLabel extends StatelessWidget {
       required this.icon,
       required this.label,
       this.iconSize = 14,
-      this.spacing = 8,
+      this.spacing = 4,
       this.textStyle});
 
   @override

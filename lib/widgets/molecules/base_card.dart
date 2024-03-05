@@ -13,6 +13,7 @@ class BaseCard extends StatelessWidget {
   final Widget? header;
   final Widget? footer;
   final Widget body;
+  final double? spacing;
   const BaseCard(
       {super.key,
       this.backgroundImage,
@@ -25,43 +26,43 @@ class BaseCard extends StatelessWidget {
       this.border,
       this.header,
       this.footer,
+      this.spacing,
       required this.body});
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
-      child: GestureDetector(
-          onTap: onTap,
-          child: Hero(
-              tag: heroTag ?? '',
-              child: ClipRRect(
-                borderRadius: borderRadius ?? BorderRadius.circular(8),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: cardColor ?? Theme.of(context).cardTheme.color,
-                    border: border,
-                    boxShadow: boxShadow ??
-                        [
-                          BoxShadow(
-                            color: Theme.of(context).shadowColor,
-                            blurRadius: 10,
-                            spreadRadius: 1,
-                            offset: const Offset(1, 2),
-                          )
-                        ],
-                    image: backgroundImage != null
-                        ? DecorationImage(
-                            image: backgroundImage!, fit: BoxFit.cover)
-                        : null,
-                  ),
-                  child: SpacedColumn(children: [
-                    if (header != null) header!,
-                    body,
-                    if (footer != null) footer!,
-                  ]),
+    return GestureDetector(
+        onTap: onTap,
+        child: Hero(
+            tag: heroTag ?? '',
+            child: Container(
+              decoration: BoxDecoration(
+                boxShadow: boxShadow ??
+                    [
+                      BoxShadow(
+                        color: Theme.of(context).shadowColor,
+                        blurRadius: 8,
+                        offset: const Offset(2, 2),
+                      )
+                    ],
+              ),
+              child: Container(
+                padding: padding ?? const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: cardColor ?? Theme.of(context).cardTheme.color,
+                  border: border,
+                  borderRadius: borderRadius ?? BorderRadius.circular(8),
+                  image: backgroundImage != null
+                      ? DecorationImage(
+                          image: backgroundImage!, fit: BoxFit.cover)
+                      : null,
                 ),
-              ))),
-    );
+                child: SpacedColumn(space: spacing ?? 8, children: [
+                  if (header != null) header!,
+                  body,
+                  if (footer != null) footer!,
+                ]),
+              ),
+            )));
   }
 }
